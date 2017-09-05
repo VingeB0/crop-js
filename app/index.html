@@ -11,11 +11,26 @@
 		<canvas id="crop-img" class="crop-img"></canvas>
 		<input id="loadImg" class="loadImg" type="file" name="file">
 		<label for="loadImg" title="load img to crop">Load image</label>
-		<button id="moveTop" class="btn" title="move img top 10px">&#9650;</button>
-		<button id="moveRight" class="btn" title="move img right 10px">&#9654;</button>
-		<button id="moveBottom" class="btn" title="move img bottom 10px">&#9660;</button>
-		<button id="moveLeft" class="btn" title="move img left 10px">&#9664;</button>
 		<button id="Clear" class="btn">Clear</button>
+		<div class="moveImage">
+			<span>Move image</span>
+			<button id="moveTop" class="btn" title="move img top 10px">&#9650;</button>
+			<button id="moveRight" class="btn" title="move img right 10px">&#9654;</button>
+			<button id="moveBottom" class="btn" title="move img bottom 10px">&#9660;</button>
+			<button id="moveLeft" class="btn" title="move img left 10px">&#9664;</button>
+			<button id="cropAndSave" class="btn" title="crop and save">Crop and save it</button>
+		</div>
+		<div class="resizeCropBox">
+			<span>params crop box</span>
+			<label for="widthCropBox">width crop box</label>
+			<input id="widthCropBox" type="number" value="160">
+			<label for="widthCropBox">height crop box</label>
+			<input id="heightCropBox" type="number" value="110">
+			<label for="indentLeft">indent left</label>
+			<input id="indentLeft" type="number" value="10">
+			<label for="indentTop">indent top</label>
+			<input id="indentTop" type="number" value="10">
+		</div>
 	</div>
 	<script src="js/common.js"></script>
 </body>

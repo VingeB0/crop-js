@@ -268,7 +268,7 @@ body {
 
 .crop-img {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
   border: 1px solid #000;
   background-color: #e2e2e2;
 }
@@ -307,4 +307,40 @@ body {
 
 .btn:hover {
   background-color: #FFAA9C;
+}
+
+.moveImage {
+  display: inline-block;
+  border: 1px solid #FFAA9C;
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+.resizeCropBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  margin-top: 6px;
+  max-width: 700px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+}
+
+.resizeCropBox span {
+  display: block;
+  width: 100%;
+}
+
+.resizeCropBox input {
+  display: inline-block;
+}
+
+.resizeCropBox label {
+  width: 50%;
 }
