@@ -261,16 +261,66 @@ body {
   align-items: center;
 }
 
-.wrap-crop-img {
-  margin: 0;
-  padding: 0;
-}
-
 .crop-img {
   display: block;
   margin-bottom: 4px;
   border: 1px solid #000;
   background-color: #e2e2e2;
+}
+
+.crop-img-wrapper {
+  margin: 0;
+  padding: 0;
+  max-width: 700px;
+  width: 100%;
+}
+
+.crop-img__row {
+  padding: 5px 0;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row norwap;
+  flex-flow: row norwap;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.crop-img__row a {
+  text-decoration: none;
+}
+
+.crop-img__row label {
+  padding: 10px 14px 8px;
+  border-radius: 4px;
+  border: 1px solid #FF836D;
+  color: #FF836D;
+  font: 16px/16px Arial, Tahoma, sans-serif;
+}
+
+.crop-img__row input {
+  padding: 0 2px;
+  border-radius: 4px;
+  border: 1px solid #FF836D;
+  color: #FF836D;
+  -webkit-transition: 0.3s all linear;
+  transition: 0.3s all linear;
+  width: 40px;
+}
+
+.crop-img__row--middle {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.crop-img__row--center {
+  margin: 0 auto;
+  width: 450px;
 }
 
 .loadImg {
@@ -294,7 +344,7 @@ body {
 }
 
 .btn {
-  padding: 7px 11px;
+  padding: 9px 11px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
@@ -307,13 +357,6 @@ body {
 
 .btn:hover {
   background-color: #FFAA9C;
-}
-
-.moveImage {
-  display: inline-block;
-  border: 1px solid #FFAA9C;
-  padding: 1px 3px;
-  border-radius: 3px;
 }
 
 .resizeCropBox {

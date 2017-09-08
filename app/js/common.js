@@ -1,6 +1,6 @@
 'use strict;'
 
-var canvas = document.querySelector('#crop-img');
+var canvas = document.querySelector('#mainCanvas');
 var ctx = canvas.getContext('2d');
 canvas.width = 700;
 canvas.height = 350;
@@ -10,7 +10,9 @@ inputLoadImg.addEventListener('change', loadImg);
 
 function loadImg(e) {
     var imgCanvas = new Image();
-    imgCanvas.src = URL.createObjectURL(e.target.files[0]);
+	imgCanvas.src = URL.createObjectURL(e.target.files[0]);
+	clearInterval(updateDraw);
+	clearCanvas();
 
     var x = 0;
     var y = 0;
@@ -121,7 +123,7 @@ function loadImg(e) {
     function drawCropBox(temp) {
         ctx.strokeStyle = colorRectStroke;
         ctx.strokeRect(valLCropBox, valTCropBox, valWCropBox, valHCropBox);
-        ctx.scale(1, 1);
+        ctx.scale(valScaleX, valScaleY);
     };
 
     var wCropBox = document.querySelector('#widthCropBox');
@@ -132,6 +134,8 @@ function loadImg(e) {
     var valHCropBox = 110;
     var valLCropBox = 10;
     var valTCropBox = 10;
+    var valScaleX = 1;
+    var valScaleY = 1;
     // 	var valHCropBox = hCropBox.value;
     // var valLCropBox = LCropBox.value;
     // var valTCropBox = TCropBox.value;
@@ -162,33 +166,40 @@ function loadImg(e) {
     };
 
 	var cropAndSave = document.querySelector('#cropAndSave');
-	cropAndSave.addEventListener('click', saveCropImg);
+	cropAndSave.addEventListener('click', function(){
+		// debugger;
+		draw();
+		saveCropImg();
+	});
 
 	function saveCropImg() {
 		var hiddenCanvas = document.createElement('canvas');
-		// // hiddenCanvas.style.display = 'none';
+		hiddenCanvas.style.display = 'none';
 		document.body.appendChild(hiddenCanvas);
 		hiddenCanvas.width = valWCropBox;
 		hiddenCanvas.height = valHCropBox;
 		var hiddenCtx = hiddenCanvas.getContext('2d');
-		colorRectStroke = 'rgba(0, 0, 0, 0)';
-		drawCropBox(colorRectStroke);
-		drawCropBox(colorRectStroke);
-
 		hiddenCtx.drawImage(canvas, valLCropBox, valTCropBox, valWCropBox, valHCropBox, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
 		var hiddenData = hiddenCanvas.toDataURL("image/png").replace("image/png", "image"); 
 		cropAndSave.setAttribute('href', hiddenData);
 		cropAndSave.setAttribute('download', 'image.png');
-		// colorRectStroke = "#FF0000";
-		// drawCropBox(colorRectStroke);
-
+		colorRectStroke = "#FF0000";
+		drawCropBox(colorRectStroke);
 	};
 
-    canvas.addEventListener('mousewheel', function(event) {
+    // canvas.addEventListener('mousewheel', function(event, valScaleX, valScaleY) {
+    canvas.addEventListener('mousewheel', function(event, valScaleY) {
         event.preventDefault();
         var valueScale = event.wheelDelta / 120;
         var zoom = Math.exp(valueScale * 0.2);
-        ctx.scale(zoom, zoom);
+        clearCanvas();
+        valScaleY += zoom;
+        // valScaleX += zoom;
+        console.log(zoom);
+        // console.log(valScaleX);
+        console.log(valScaleY);
+        drawCropBox(valScaleY);
+        // ctx.scale(zoom, zoom);
       });
 
 	var isDrag = false;
