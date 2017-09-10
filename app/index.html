@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<link rel="stylesheet" href="css/index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
+
 <body>
-	<div class="crop-img-wrapper">
-		<canvas id="mainCanvas" class="crop-img"></canvas>
-		<div class="crop-img__controls">
-			<div class="crop-img__row">
-				<input id="loadImg" class="loadImg" type="file" name="file">
-				<label for="loadImg" title="load img to crop">Load image to crop</label>
-				<button id="Clear" class="btn" title="clear canvas">Clear canvas</button>
-				<label>Use wheel mouse to scroll img</label>
-				<a id="cropAndSave" class="btn" title="crop and save">Crop and save it</a>
-			</div>
-			<div class="crop-img__row crop-img__row--center">
-				<label>Buttons to move image in canvas</label>
-				<button id="moveLeft" class="btn" title="move img left 10px">&#9664;</button>
-				<button id="moveTop" class="btn" title="move img top 10px">&#9650;</button>
-				<button id="moveBottom" class="btn" title="move img bottom 10px">&#9660;</button>
-				<button id="moveRight" class="btn" title="move img right 10px">&#9654;</button>
-			</div>
-			<div class="crop-img__row crop-img__row--middle">
-				<label>Params crop box</label>
-			</div>
-			<div class="crop-img__row">
-				<label for="widthCropBox">width crop box</label>
-				<input id="widthCropBox" type="text" value="160">
-				<label for="widthCropBox">height crop box</label>
-				<input id="heightCropBox" type="text" value="110">
-				<label for="indentLeft">indent left</label>
-				<input id="indentLeft" type="text" value="10">
-				<label for="indentTop">indent top</label>
-				<input id="indentTop" type="text" value="10">
-			</div>
-		</div>
-	</div>
-	<script src="js/common.js"></script>
+    <div class="crop-img-wrapper">
+        <canvas id="mainCanvas" class="crop-img"></canvas>
+        <div class="crop-img__controls">
+            <div class="crop-img__row">
+                <input id="loadImg" class="loadImg" type="file" name="file">
+                <label for="loadImg" title="load img to crop">Load image to crop</label>
+                <button id="Clear" class="btn" title="clear canvas">Clear canvas</button>
+                <label>Use wheel mouse to scroll img</label>
+                <a id="cropAndSave" class="btn" title="crop and save">Crop and save it</a>
+            </div>
+            <div class="crop-img__row crop-img__row--center">
+                <label>Buttons to move image in canvas</label>
+                <button id="moveLeft" class="btn" title="move img left 10px">&#9664;</button>
+                <button id="moveTop" class="btn" title="move img top 10px">&#9650;</button>
+                <button id="moveBottom" class="btn" title="move img bottom 10px">&#9660;</button>
+                <button id="moveRight" class="btn" title="move img right 10px">&#9654;</button>
+            </div>
+            <div class="crop-img__row crop-img__row--middle">
+                <label>Params crop box</label>
+            </div>
+            <div class="crop-img__row">
+                <label for="widthCropBox">width crop box</label>
+                <input id="widthCropBox" type="text" value="160">
+                <label for="widthCropBox">height crop box</label>
+                <input id="heightCropBox" type="text" value="110">
+                <label for="indentLeft">indent left</label>
+                <input id="indentLeft" type="text" value="10">
+                <label for="indentTop">indent top</label>
+                <input id="indentTop" type="text" value="10">
+            </div>
+        </div>
+    </div>
+    <script src="js/common.js"></script>
 </body>
+
 </html>

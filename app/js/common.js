@@ -10,9 +10,43 @@ inputLoadImg.addEventListener('change', loadImg);
 
 function loadImg(e) {
     var imgCanvas = new Image();
-	imgCanvas.src = URL.createObjectURL(e.target.files[0]);
-	clearInterval(updateDraw);
-	clearCanvas();
+
+    imgCanvas.addEventListener('load', getHeigthWidth);
+
+    function getHeigthWidth() {
+        zoomX = imgCanvas.naturalWidth;
+        zoomY = imgCanvas.naturalHeight;
+        draw(zoomX, zoomY);
+    };
+
+    imgCanvas.src = URL.createObjectURL(e.target.files[0]);
+    clearInterval(updateDraw);
+    clearCanvas();
+
+    var zoomX;
+    var zoomY;
+    canvas.addEventListener('mousewheel', wheelScaleImg);
+
+    function wheelScaleImg(event) {
+        event.preventDefault();
+        var valueScale = event.wheelDelta / 120;
+        var zoom = Math.exp(valueScale * 0.2);
+        clearCanvas();
+        zoomY = zoomY * zoom;
+        zoomX = zoomX * zoom;
+        draw(zoomX, zoomY);
+        console.log(zoomX);
+        console.log(zoomY);
+    };
+
+    function draw(temp) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+        // wheelScaleImg(zoomY, zoomX);
+        ctx.drawImage(imgCanvas, y, x, zoomX, zoomY);
+    };
 
     var x = 0;
     var y = 0;
@@ -99,19 +133,11 @@ function loadImg(e) {
         }, 100);
     };
 
-    function draw() {
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.restore();
-        ctx.drawImage(imgCanvas, y, x);
-    };
-
     var updateDraw = setInterval(function() {
         draw();
         drawCropBox();
         // drawStartImg();
-    }, 100);
+    }, 10);
 
     var btnClear = document.querySelector('#Clear');
     btnClear.addEventListener('click', function() {
@@ -120,11 +146,36 @@ function loadImg(e) {
     });
 
     var colorRectStroke = "#FF0000";
+
     function drawCropBox(temp) {
         ctx.strokeStyle = colorRectStroke;
         ctx.strokeRect(valLCropBox, valTCropBox, valWCropBox, valHCropBox);
         ctx.scale(valScaleX, valScaleY);
     };
+
+    var isDrag = false;
+    canvas.addEventListener('mousemove', function(e) {
+        if (isDrag) {
+            valLCropBox = e.pageX - canvas.offsetLeft - (valWCropBox) / 2;
+            valTCropBox = e.pageY - canvas.offsetTop - (valHCropBox / 2);
+            drawCropBox(valLCropBox, valTCropBox);
+        };
+    });
+
+    canvas.addEventListener('mousedown', function(e) {
+        if (e.pageX < valLCropBox + valWCropBox + canvas.offsetLeft && e.pageX > valLCropBox - valHCropBox +
+            canvas.offsetLeft && e.pageY < valTCropBox + valWCropBox + canvas.offsetTop &&
+            e.pageY > valTCropBox - valWCropBox + canvas.offsetTop) {
+            valLCropBox = e.pageX - canvas.offsetLeft - (valWCropBox / 2);
+            valTCropBox = e.pageY - canvas.offsetTop - (valHCropBox / 2);;
+            isDrag = true;
+        }
+    });
+
+    canvas.addEventListener('mouseup', function(e) {
+        isDrag = false;
+        canvas.onmousemove = null
+    });
 
     var wCropBox = document.querySelector('#widthCropBox');
     var hCropBox = document.querySelector('#heightCropBox');
@@ -136,7 +187,7 @@ function loadImg(e) {
     var valTCropBox = 10;
     var valScaleX = 1;
     var valScaleY = 1;
-    // 	var valHCropBox = hCropBox.value;
+    //  var valHCropBox = hCropBox.value;
     // var valLCropBox = LCropBox.value;
     // var valTCropBox = TCropBox.value;
 
@@ -151,85 +202,39 @@ function loadImg(e) {
     };
 
     function changeHCropBox(temp) {
-    	valHCropBox = hCropBox.value;
-    	drawCropBox(valHCropBox);
+        valHCropBox = hCropBox.value;
+        drawCropBox(valHCropBox);
     };
 
     function changeLCropBox(temp) {
-    	valLCropBox = lCropBox.value;
-    	drawCropBox(valLCropBox);
+        valLCropBox = lCropBox.value;
+        drawCropBox(valLCropBox);
     };
 
     function changeTCropBox(temp) {
-    	valTCropBox = tCropBox.value;
-    	drawCropBox(valTCropBox);
+        valTCropBox = tCropBox.value;
+        drawCropBox(valTCropBox);
     };
 
-	var cropAndSave = document.querySelector('#cropAndSave');
-	cropAndSave.addEventListener('click', function(){
-		// debugger;
-		draw();
-		saveCropImg();
-	});
-
-	function saveCropImg() {
-		var hiddenCanvas = document.createElement('canvas');
-		hiddenCanvas.style.display = 'none';
-		document.body.appendChild(hiddenCanvas);
-		hiddenCanvas.width = valWCropBox;
-		hiddenCanvas.height = valHCropBox;
-		var hiddenCtx = hiddenCanvas.getContext('2d');
-		hiddenCtx.drawImage(canvas, valLCropBox, valTCropBox, valWCropBox, valHCropBox, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
-		var hiddenData = hiddenCanvas.toDataURL("image/png").replace("image/png", "image"); 
-		cropAndSave.setAttribute('href', hiddenData);
-		cropAndSave.setAttribute('download', 'image.png');
-		colorRectStroke = "#FF0000";
-		drawCropBox(colorRectStroke);
-	};
-
-    // canvas.addEventListener('mousewheel', function(event, valScaleX, valScaleY) {
-    canvas.addEventListener('mousewheel', function(event, valScaleY) {
-        event.preventDefault();
-        var valueScale = event.wheelDelta / 120;
-        var zoom = Math.exp(valueScale * 0.2);
-        clearCanvas();
-        valScaleY += zoom;
-        // valScaleX += zoom;
-        console.log(zoom);
-        // console.log(valScaleX);
-        console.log(valScaleY);
-        drawCropBox(valScaleY);
-        // ctx.scale(zoom, zoom);
-      });
-
-	var isDrag = false;
-    canvas.addEventListener('mousedown', function(e) {
-		if (e.pageX < x + 15 + canvas.offsetLeft && e.pageX > x - 15 +
-		canvas.offsetLeft && e.pageY < y + 15 + canvas.offsetTop &&
-		e.pageY > y -15 + canvas.offsetTop){
-			x = e.pageX - canvas.offsetLeft;
-			y = e.pageY - canvas.offsetTop;
-			dragok = true;
-			canvas.onmousemove = myMove;
-		}
+    var cropAndSave = document.querySelector('#cropAndSave');
+    cropAndSave.addEventListener('click', function() {
+        // debugger;
+        draw();
+        saveCropImg();
     });
 
-    canvas.addEventListener('mousemove', function(e, tempX, tempY) {
-    	if (isDrag) {
-    		valLCropBox = e.pageX - canvas.OffsetLeft;
-    		// valTCropBox = e.pageY - canvas.OffsetTop;
-    		drawCropBox(valLCropBox);
-    		console.log(valLCropBox);
-    		// console.log(valTCropBox);
-    		console.log(e.pageX);
-    		console.log(canvas.offsetLeft);
-    	};
-    });
-
-
-    canvas.addEventListener('mouseup', function(e) {
-		isDrag = false;
-		canvas.onmousemove = null
-    });
-
+    function saveCropImg() {
+        var hiddenCanvas = document.createElement('canvas');
+        hiddenCanvas.style.display = 'none';
+        document.body.appendChild(hiddenCanvas);
+        hiddenCanvas.width = valWCropBox;
+        hiddenCanvas.height = valHCropBox;
+        var hiddenCtx = hiddenCanvas.getContext('2d');
+        hiddenCtx.drawImage(canvas, valLCropBox, valTCropBox, valWCropBox, valHCropBox, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+        var hiddenData = hiddenCanvas.toDataURL("image/png").replace("image/png", "image");
+        cropAndSave.setAttribute('href', hiddenData);
+        cropAndSave.setAttribute('download', 'image.png');
+        colorRectStroke = "#FF0000";
+        drawCropBox(colorRectStroke);
+    };
 };

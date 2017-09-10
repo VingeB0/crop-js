@@ -266,6 +266,7 @@ body {
   margin-bottom: 4px;
   border: 1px solid #000;
   background-color: #e2e2e2;
+  cursor: move;
 }
 
 .crop-img-wrapper {
@@ -344,7 +345,7 @@ body {
 }
 
 .btn {
-  padding: 9px 11px;
+  padding: 9px 11px 8px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
