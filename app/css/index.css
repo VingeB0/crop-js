@@ -261,12 +261,28 @@ body {
   align-items: center;
 }
 
-.crop-img {
-  display: block;
+.wrap-canvas {
+  position: relative;
+  width: 700px;
+  height: 350px;
   margin-bottom: 4px;
-  border: 1px solid #000;
-  background-color: #e2e2e2;
+}
+
+.crop-box {
+  position: absolute;
+  display: block;
+  background-color: transparent;
+  border: 1px solid #EC7279;
   cursor: move;
+}
+
+.crop-img {
+  position: absolute;
+  display: block;
+  border: 1px solid #000;
+  background-color: transparent;
+  cursor: move;
+  z-index: 1;
 }
 
 .crop-img-wrapper {
@@ -354,6 +370,11 @@ body {
   -webkit-transition: 0.3s all linear;
   transition: 0.3s all linear;
   outline: none;
+}
+
+.btn-disabled {
+  background-color: #FFAA9C;
+  cursor: not-allowed;
 }
 
 .btn:hover {
