@@ -61,7 +61,6 @@ function loadImg(e) {
         draw(zoomX, zoomY);
     };
 
-
     var x = 0;
     var y = 0;
     var moveTop = document.querySelector('#moveTop');
@@ -79,13 +78,8 @@ function loadImg(e) {
         draw();
         clearcanvasCropBox();
         drawCropBox();
+        drawCircleHandles();
     }, 10);
-
-    var btnClear = document.querySelector('#Clear');
-    btnClear.addEventListener('click', function() {
-        clearInterval(updateDraw);
-        clearcanvasImage();
-    });
 
     var colorRectStroke = "#FF0000";
 
@@ -104,6 +98,24 @@ function loadImg(e) {
         ctxCropBox.restore();
     };
 
+    function drawCircle(x, y, radius) {
+        ctxCropBox.fillStyle = "#FF0000";
+        ctxCropBox.beginPath();
+        ctxCropBox.arc(x, y, radius, 0, 2 * Math.PI);
+        ctxCropBox.fill();
+    };
+
+    var closeEnough = 10;
+
+    function drawCircleHandles() {
+        drawCircle(valLCropBox, valTCropBox, closeEnough);
+        drawCircle(valLCropBox + valWCropBox, valTCropBox, closeEnough);
+        drawCircle(valLCropBox + valWCropBox, valTCropBox + valHCropBox, closeEnough);
+        drawCircle(valLCropBox, valTCropBox + valHCropBox, closeEnough);
+    }
+
+    var dragTL = dragTR = dragBL = dragBR = false;
+
     function drawCropBox(temp) {
         ctxCropBox.strokeStyle = colorRectStroke;
         ctxCropBox.strokeRect(valLCropBox, valTCropBox, valWCropBox, valHCropBox);
@@ -118,6 +130,30 @@ function loadImg(e) {
             valTCropBox = e.pageY - wrapCanvas.offsetTop - (valHCropBox / 2);
             drawCropBox(valLCropBox, valTCropBox);
         };
+
+        valLCropBoxX = e.pageX - wrapCanvas.offsetLeft;
+        valTCropBoxY = e.pageY - wrapCanvas.offsetTop;
+        if (dragTL) {
+            valWCropBox += valLCropBox - valLCropBoxX;
+            valHCropBox += valTCropBox - valTCropBoxY;
+            valLCropBox = valLCropBoxX;
+            valTCropBox = valTCropBoxY;
+            console.log('11');
+        } else if (dragTR) {
+            valWCropBox = Math.abs(valLCropBox - valLCropBoxX);
+            valHCropBox += valTCropBox - valTCropBoxY;
+            valTCropBox = valTCropBoxY;
+            console.log('12');
+        } else if (dragBL) {
+            valWCropBox += valLCropBox - valLCropBoxX;
+            valHCropBox = Math.abs(valTCropBox - valTCropBoxY);
+            valLCropBox = valLCropBoxX;
+            console.log('13');
+        } else if (dragBR) {
+            valWCropBox = Math.abs(valLCropBox - valLCropBoxX);
+            valHCropBox = Math.abs(valTCropBox - valTCropBoxY);
+            console.log('14');
+        }
     };
 
     function mDownCropBox(e) {
@@ -127,12 +163,66 @@ function loadImg(e) {
             valLCropBox = e.pageX - wrapCanvas.offsetLeft - (valWCropBox / 2);
             valTCropBox = e.pageY - wrapCanvas.offsetTop - (valHCropBox / 2);
             isDragCropBox = true;
+        };
+        valLCropBoxX = e.pageX - wrapCanvas.offsetLeft;
+        valTCropBoxY = e.pageY - wrapCanvas.offsetTop;
+        console.log('wrapCanvas.offsetLeft: ' + wrapCanvas.offsetLeft);
+        console.log('wrapCanvas.offsetTop: ' + wrapCanvas.offsetTop);
+        console.log('e.pageX: ' + e.pageX);
+        console.log('e.pageY: ' + e.pageY);
+        console.log('valLCropBoxX: ' + valLCropBoxX);
+        console.log('valTCropBoxY: ' + valTCropBoxY);
+        console.log('****************************')
+        console.dir(canvasCropBox);
+        console.dir(e);
+
+        if (valWCropBox === undefined) {
+            valLCropBox = valLCropBoxX;
+            valTCropBox = valTCropBoxY;
+            dragBR = true;
+            console.log('1');
+        } else if (Math.abs(valLCropBoxX - valLCropBox) < closeEnough && Math.abs(valTCropBoxY - valTCropBox) < closeEnough) {
+            dragTL = true;
+            console.log('2');
+            console.log(Math.abs(valLCropBoxX - valLCropBox) < closeEnough + ' && ' + Math.abs(valTCropBoxY - valTCropBox) < closeEnough);
+            console.log(Math.abs(valLCropBoxX - valLCropBox) + '<' + closeEnough);
+            console.log(Math.abs(valTCropBoxY - valTCropBox) + '<' + closeEnough);
+            console.log('--------------------------------------------');
+            console.log('valLCropBoxX: ' + valLCropBoxX);
+            console.log('valLCropBox: ' + valLCropBox);
+            console.log('valWCropBox: ' + valWCropBox);
+            console.log('closeEnough: ' + closeEnough);
+
+            console.log('--------------------------------------------');
+            // } else if ( |ERROR! Math.abs(valLCropBoxX - valLCropBox + valWCropBox) ERROR! < closeEnough && Math.abs(valTCropBoxY - valTCropBox) < closeEnough) {
+        } else if (Math.abs(valTCropBoxY - valTCropBox) < closeEnough) {
+            dragTR = true;
+            console.log('888888888888888888888888888888888888888888888888888');
+            console.log('valLCropBoxX: ' + valLCropBoxX + ' - ' + 'valLCropBox: ' + valLCropBox + ' + ' + 'valWCropBox: ' + valWCropBox + ' < ' + 'closeEnough: ' + closeEnough);
+            console.log('valLCropBoxY: ' + valTCropBoxY + ' - ' + 'valTCropBox: ' + valTCropBox + ' + ' + 'valHCropBox: ' + valHCropBox + ' < ' + 'closeEnough: ' + closeEnough);
+            console.log('e.pageX: ' + e.pageX + '-' + 'wrapCanvas.offsetLeft: ' + wrapCanvas.offsetLeft);
+            console.log('888888888888888888888888888888888888888888888888888');
+            console.log('3');
+            console.log(Math.abs(valLCropBoxX - valLCropBox + valWCropBox) < closeEnough && Math.abs(valTCropBoxY - valTCropBox + valHCropBox) < closeEnough);
+            console.log(Math.abs(valLCropBoxX - valLCropBox + valWCropBox) + '<' + closeEnough);
+            console.log(Math.abs(valTCropBoxY - valTCropBox) + '<' + closeEnough);
+            // } else if (Math.abs(valLCropBoxX - valLCropBox) < closeEnough && ERROR!Math.abs(valTCropBoxY - valTCropBox + valHCropBox) < closeEnough)ERROR! {
+        } else if (Math.abs(valLCropBoxX - valLCropBox) < closeEnough) {
+            dragBL = true;
+            console.log('4');
+            // } else if ERROR!M(Math.abs(valLCropBoxX - valLCropBox + valWCropBox) < closeEnough ERROR!M && Math.abs(valTCropBoxY - valTCropBox + valHCropBox) < closeEnough) {
+        } else if (Math.abs(valLCropBoxX - valLCropBox + valWCropBox) < closeEnough && Math.abs(valLCropBoxY - valTCropBox + valHCropBox) < closeEnough) {
+            dragBR = true;
+            console.log('5');
+        } else {
+            console.log('123');
         }
     };
 
     function mUpCropBox() {
         isDragCropBox = false;
-        canvasCropBox.onmousemove = null
+        canvasCropBox.onmousemove = null;
+        dragTL = dragTR = dragBL = dragBR = false;
     };
 
     canvasCropBox.addEventListener('mousemove', function(e) {
@@ -166,8 +256,8 @@ function loadImg(e) {
             ctxImg.drawImage(imgcanvasImage, y, x);
             clearcanvasImage();
             draw(x, y);
-            x = e.pageY - wrapCanvas.offsetTop - (zoomY/2);
-            y = e.pageX - wrapCanvas.offsetLeft - (zoomX/2);
+            x = e.pageY - wrapCanvas.offsetTop - (zoomY / 2);
+            y = e.pageX - wrapCanvas.offsetLeft - (zoomX / 2);
         };
     };
 
